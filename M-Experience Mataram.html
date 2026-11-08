@@ -207,11 +207,86 @@ footer a{display:block;text-decoration:none;opacity:.85;padding:3px 0;font-size:
 footer a:hover{opacity:1;text-decoration:underline}
 footer .fine{margin-top:28px;font-size:.8rem;opacity:.75;border-top:1px solid rgba(255,255,255,.25);padding-top:16px}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ===== cinematic motion layer ===== */
+#prog{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;height:3px;background:var(--gold);transform-origin:0 50%;transform:scaleX(0);z-index:70;pointer-events:none}
+#cur{position:fixed;left:0;top:0;width:38px;height:38px;border:1.5px solid #fff;border-radius:50%;mix-blend-mode:difference;pointer-events:none;z-index:200;opacity:0;transition:opacity .3s}
+#cur.on{opacity:1}
+@media (hover:none),(pointer:coarse){#cur{display:none}}
+#curtain{position:fixed;inset:0;z-index:150;background:#0a1040;transform:translateY(101%);pointer-events:none;display:grid;place-items:center;color:var(--gold)}
+#curtain svg{width:84px;height:84px}
+#curtain::before{content:"";position:absolute;inset:0;opacity:.18;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 44 44' fill='none' stroke='white' stroke-width='1.3'%3E%3Cellipse cx='22' cy='11' rx='6.5' ry='11'/%3E%3Cellipse cx='22' cy='33' rx='6.5' ry='11'/%3E%3Cellipse cx='11' cy='22' rx='11' ry='6.5'/%3E%3Cellipse cx='33' cy='22' rx='11' ry='6.5'/%3E%3C/svg%3E")}
+.top{transition:transform .5s cubic-bezier(.2,.8,.2,1),background-color .4s,box-shadow .4s}
+.top.hide{transform:translateY(-110%)}
+.top.clear{background:transparent;color:#fff;box-shadow:none}
+.top.clear .nav a:hover,.top.clear .nav a[aria-current="page"]{background:rgba(255,255,255,.16)}
+.rv{opacity:.12;transform:translateY(40px);transition:opacity 1s ease var(--d,0ms),transform 1s cubic-bezier(.2,.8,.2,1) var(--d,0ms)}
+.rv.in{opacity:1;transform:none}
+.rv.done{transition:transform .45s cubic-bezier(.2,.8,.2,1),box-shadow .45s,opacity .3s}
+.card.done:hover{transform:translateY(-8px);box-shadow:0 0 0 1px var(--line),0 24px 40px -18px rgba(10,16,64,.45)}
+.card .art::before{transition:transform 1.2s cubic-bezier(.2,.8,.2,1),opacity .6s}
+.card:hover .art::before{transform:scale(1.35) rotate(3deg);opacity:.34}
+.tvgrid .card:hover .play{transform:scale(1.15)}
+.tvgrid .play{transition:transform .4s}
+.btn{transition:transform .35s cubic-bezier(.2,.8,.2,1),filter .3s,box-shadow .3s}
+.btn.gold:hover{box-shadow:0 10px 30px -8px rgba(201,151,47,.7)}
+@keyframes up{from{transform:translateY(112%)}to{transform:none}}
+@keyframes fu{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+@keyframes drift{to{background-position:176px 176px}}
+@keyframes cue{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+.cine{--sy:0;--gx:72%;--gy:28%;min-height:max(660px,100svh);margin-top:-62px;display:flex;align-items:center;position:relative;overflow:hidden}
+.cine::before{background-size:44px 44px;animation:drift 50s linear infinite}
+.cine::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(700px circle at var(--gx) var(--gy),rgba(201,151,47,.26),transparent 62%),linear-gradient(180deg,rgba(5,8,32,.5),transparent 28%,transparent 70%,rgba(5,8,32,.7))}
+.cine .wrap{position:relative;z-index:2;width:100%;padding-block:140px 110px;transform:translate3d(0,calc(var(--sy)*.1px),0)}
+.cine .bgtxt{position:absolute;left:-1.5%;bottom:-5%;z-index:1;font:400 clamp(8rem,27vw,25rem)/.8 var(--display);color:transparent;-webkit-text-stroke:1.2px rgba(255,255,255,.2);white-space:nowrap;pointer-events:none;user-select:none;transform:translate3d(calc(var(--sy)*-.12px),calc(var(--sy)*.28px),0)}
+.cine h1{font-size:clamp(2.6rem,7.4vw,6.4rem);letter-spacing:-.01em}
+.ln{display:block;overflow:hidden;padding-bottom:.1em;margin-bottom:-.1em}
+.ln>span{display:block;animation:up 1.1s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i)*.13s + .2s)}
+.fu{animation:fu 1s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i,0)*.12s + .75s)}
+.tiltwrap{perspective:900px}
+.matchcard{transition:transform .25s ease-out;transform-style:preserve-3d;will-change:transform}
+.cue{position:absolute;left:50%;bottom:22px;z-index:3;display:flex;flex-direction:column;align-items:center;gap:8px;font:600 .68rem var(--mono);letter-spacing:.2em;text-transform:uppercase;color:#fff;opacity:.8;transform:translateX(-50%)}
+.cue i{display:block;width:1px;height:46px;background:#fff;animation:cue 2.2s ease-in-out infinite}
+@media(max-width:860px){.cine .wrap{padding-block:110px 90px}.cue{display:none}}
+.stats{background:#0a1040;color:#fff;padding-block:64px;border-top:1px solid rgba(255,255,255,.12)}
+.stats .grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:28px}
+.stat{border-left:1px solid rgba(255,255,255,.22);padding-left:20px}
+.stat b{display:block;font:400 clamp(2.8rem,7vw,5.2rem)/1 var(--display);color:var(--gold);font-variant-numeric:tabular-nums}
+.stat span{font:500 .78rem var(--mono);letter-spacing:.1em;text-transform:uppercase;opacity:.8}
+.marq{background:var(--gold);color:#1a1405;overflow:hidden;white-space:nowrap;padding-block:18px;border-block:1px solid rgba(0,0,0,.15)}
+.mt{display:inline-flex;will-change:transform}
+.mt span{font:400 clamp(1.6rem,4vw,3rem)/1 var(--display);padding-inline:.6em;display:inline-flex;align-items:center;gap:1.2em;text-transform:uppercase}
+.mt span:nth-child(even){color:transparent;-webkit-text-stroke:1.2px #1a1405}
+.mt span::after{content:"";width:.34em;height:.34em;background:currentColor;transform:rotate(45deg);display:inline-block;flex:none}
+.mt span:nth-child(even)::after{background:#1a1405}
+.hs{position:relative;background:#0a1040;color:#fff;--n:6}
+.hs-in{position:sticky;top:0;height:100svh;overflow:hidden;display:flex;align-items:center}
+.hs-in::before{content:"";position:absolute;inset:0;opacity:.07;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 44 44' fill='none' stroke='white' stroke-width='1.3'%3E%3Cellipse cx='22' cy='11' rx='6.5' ry='11'/%3E%3Cellipse cx='22' cy='33' rx='6.5' ry='11'/%3E%3Cellipse cx='11' cy='22' rx='11' ry='6.5'/%3E%3Cellipse cx='33' cy='22' rx='11' ry='6.5'/%3E%3C/svg%3E")}
+.hs-track{display:flex;gap:28px;align-items:stretch;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:12vw;will-change:transform;position:relative;height:min(74svh,640px)}
+.hs-intro{flex:none;width:min(86vw,460px);display:flex;flex-direction:column;justify-content:center;gap:18px}
+.hs-intro p{opacity:.8;max-width:38ch}
+.hs-panel{flex:none;width:clamp(280px,74vw,560px);border-radius:14px;padding:28px;display:flex;flex-direction:column;justify-content:flex-end;gap:12px;position:relative;overflow:hidden;background:linear-gradient(160deg,var(--a),var(--b));box-shadow:0 0 0 1px rgba(255,255,255,.14)}
+.hs-panel .big{position:absolute;right:14px;top:-6px;font:400 clamp(7rem,18vw,13rem)/1 var(--display);color:transparent;-webkit-text-stroke:1.2px rgba(255,255,255,.35)}
+.hs-panel h3{font-size:clamp(1.6rem,3.4vw,2.4rem)}
+.hs-panel .meta{color:var(--gold)}
+.hs-panel p{opacity:.88;max-width:40ch;font-size:.98rem}
+.hs-bar{position:absolute;left:max(16px,env(safe-area-inset-left,0px));right:max(16px,env(safe-area-inset-right,0px));bottom:calc(26px + env(safe-area-inset-bottom,0px));height:2px;background:rgba(255,255,255,.2)}
+.hs-bar i{display:block;height:100%;background:var(--gold);transform-origin:0 50%;transform:scaleX(0)}
+.hs.native{height:auto!important}
+.hs.native .hs-in{position:static;height:auto;padding-block:56px 72px;overflow-x:auto}
+.hs.native .hs-bar{display:none}
+@media(prefers-reduced-motion:reduce){
+  .ln>span,.fu,.cine::before,.cue i{animation:none!important}
+  .rv{opacity:1;transform:none}
+  .cine .wrap,.cine .bgtxt{transform:none!important}
+}
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="logo" viewBox="0 0 32 32"><circle cx="16" cy="16" r="15" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 4v24M16 4l-3 5h6zM9 20q7 5 14 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
 </svg>
+
+<div id="prog"></div><div id="cur"></div><div id="curtain" aria-hidden="true"><svg><use href="#logo"/></svg></div>
 
 <header class="top">
   <div class="wrap">
@@ -351,21 +426,34 @@ let tk={matchId:'m1',tier:'utama',qty:2,museum:true,food:'gudeg',pay:'QRIS',pass
 P.beranda=()=>{
   const m=MATCHES[0];
   return `
-<section class="hero art" style="${artStyle({a:'#1d2a73',b:'#0a1040'})}"><div class="wrap">
+<section class="hero art cine" style="${artStyle({a:'#1d2a73',b:'#0a1040'})}">
+<div class="bgtxt" aria-hidden="true">MATARAM</div>
+<div class="wrap" style="display:grid;grid-template-columns:1.25fr 1fr;gap:40px;align-items:center">
   <div>
-    <span class="eyebrow" style="color:var(--gold)">PSIM Yogyakarta · Laskar Mataram</span>
-    <h1 style="margin-top:14px">Dari Tugu ke <em>Mandala Krida</em>, satu perjalanan.</h1>
-    <p class="lead">Beli tiket laga kandang, telusuri Sumbu Filosofis Yogyakarta, belanja batik pengrajin Mataram, dan tonton Mataram TV. Semua lewat browser, tanpa unduh aplikasi.</p>
-    <div class="cta"><a class="btn gold" href="#tiket">Beli Heritage Pass</a><a class="btn ghost" href="#jelajah">Mulai jejak budaya</a></div>
+    <span class="eyebrow fu" style="color:var(--gold);--i:0">PSIM Yogyakarta · Laskar Mataram · Sejak 1929</span>
+    <h1 style="margin-top:18px"><span class="ln" style="--i:0"><span style="--i:0">Dari Tugu ke</span></span><span class="ln"><span style="--i:1;color:var(--gold)">Mandala Krida,</span></span><span class="ln"><span style="--i:2">satu perjalanan.</span></span></h1>
+    <p class="lead fu" style="--i:1">Beli tiket laga kandang, telusuri Sumbu Filosofis Yogyakarta, belanja batik pengrajin Mataram, dan tonton Mataram TV. Semua lewat browser, tanpa unduh aplikasi.</p>
+    <div class="cta fu" style="--i:2"><a class="btn gold mag" href="#tiket">Beli Heritage Pass</a><a class="btn ghost mag" href="#jelajah">Mulai jejak budaya</a></div>
   </div>
-  <div class="matchcard">
+  <div class="tiltwrap fu" style="--i:3"><div class="matchcard" id="tilt">
     <span class="eyebrow" style="color:var(--gold)">${esc(m.comp)}</span>
     <div class="vs"><span>PSIM</span><span style="font:600 .8rem var(--mono);opacity:.7">VS</span><span style="text-align:right">${esc(m.opp.split(' ')[0])}</span></div>
     <div class="cd" id="cd" aria-live="off"><div><b>00</b><small>hari</small></div><div><b>00</b><small>jam</small></div><div><b>00</b><small>menit</small></div><div><b>00</b><small>detik</small></div></div>
     <p class="meta" style="margin:14px 0;color:#fff;opacity:.8">${fmtDate(m.date)} · ${fmtTime(m.date)} WIB · Stadion Mandala Krida</p>
-    <button class="btn gold" style="width:100%" data-act="buy" data-id="${m.id}">Pesan tiket laga ini</button>
-  </div>
-</div></section>
+    <button class="btn gold mag" style="width:100%" data-act="buy" data-id="${m.id}">Pesan tiket laga ini</button>
+  </div></div>
+</div>
+<div class="cue" aria-hidden="true"><span>Gulir</span><i></i></div>
+</section>
+
+<section class="stats"><div class="wrap"><div class="grid">
+  <div class="stat"><b class="count" data-to="1929">1929</b><span>PSIM Yogyakarta berdiri</span></div>
+  <div class="stat"><b class="count" data-to="1930">1930</b><span>PSSI lahir di Yogyakarta</span></div>
+  <div class="stat"><b class="count" data-to="6">6</b><span>Pemberhentian Sumbu Filosofis</span></div>
+  <div class="stat"><b class="count" data-to="70" data-suf="%">70%</b><span>Hasil penjualan untuk pengrajin</span></div>
+</div></div></section>
+
+<div class="marq" aria-hidden="true"><div class="mt" id="mt">${[0,1].map(()=>['Laskar Mataram','Sumbu Filosofis','Sejak 1929','Mandala Krida','Batik Kawung','Mataram TV'].map(w=>`<span>${w}</span>`).join('')).join('')}</div></div>
 
 <section class="sec"><div class="wrap">
   <div class="sec-h"><div><span class="eyebrow">Berita terbaru</span><h2>Kabar dari Laskar Mataram</h2></div><a class="btn ghost sm" href="#berita">Semua berita</a></div>
@@ -387,13 +475,10 @@ P.beranda=()=>{
   </div>
 </div></section>
 
-<section class="sec alt"><div class="wrap">
-  <div class="sec-h"><div><span class="eyebrow">Jejak budaya</span><h2>Dari Panggung Krapyak sampai Tugu</h2></div><a class="btn ghost sm" href="#jelajah">Buka peta</a></div>
-  <div class="grid g2" style="align-items:center">
-    <p class="story" style="font-size:1.12rem">Sumbu Filosofis Yogyakarta ditetapkan UNESCO sebagai Situs Warisan Dunia. Telusuri enam pemberhentian dengan narasi audio, model 3D, dan stempel check-in yang menambah poin loyalti.</p>
-    <div class="stamps">${STOPS.map((s,i)=>`<span class="stamp ${S.checkins.includes(s.id)?'on':''}" title="${esc(s.n)}">${i+1}</span>`).join('')}</div>
-  </div>
-</div></section>
+<section class="hs" id="hs"><div class="hs-in"><div class="hs-track" id="hsT">
+  <div class="hs-intro"><span class="eyebrow" style="color:var(--gold)">Jejak budaya</span><h2 style="font-size:clamp(2.2rem,5vw,3.6rem)">Dari Panggung Krapyak sampai Tugu</h2><p>Sumbu Filosofis Yogyakarta ditetapkan UNESCO sebagai Situs Warisan Dunia. Gulir untuk berjalan dari selatan ke utara, lalu buka peta dan dengarkan narasinya.</p><a class="btn gold mag" href="#jelajah" style="align-self:flex-start">Buka peta &amp; audio</a></div>
+  ${STOPS.map((x,i)=>{const pal=[['#8a4524','#3d1a0a'],['#2a5a52','#0f2c29'],['#1d2a73','#0a1040'],['#7a3a1a','#3d1a0a'],['#5a2c6e','#26113a'],['#34406e','#141c3f']][i];return `<article class="hs-panel" style="--a:${pal[0]};--b:${pal[1]}"><span class="big" aria-hidden="true">${String(i+1).padStart(2,'0')}</span><span class="meta">${esc(x.sub)}</span><h3>${esc(x.n)}</h3><p>${esc(x.s.id)}</p><button class="btn ghost sm" style="align-self:flex-start;color:#fff;box-shadow:inset 0 0 0 2px rgba(255,255,255,.45)" data-act="gostop" data-id="${x.id}">Buka di peta${S.checkins.includes(x.id)?' · sudah check-in':''}</button></article>`}).join('')}
+</div><div class="hs-bar"><i id="hsB"></i></div></div></section>
 
 <section class="sec"><div class="wrap">
   <div class="sec-h"><div><span class="eyebrow">Pasar Batik Mataram</span><h2>Dari tangan pengrajin</h2></div><a class="btn ghost sm" href="#pasar">Lihat katalog</a></div>
@@ -626,7 +711,7 @@ function render(keep){
   if(route==='jelajah')initViewer();
   const f=$('#addp');if(f)f.addEventListener('submit',e=>{e.preventDefault();const n=$('#pn').value.trim(),p=+$('#pp').value;if(!n||!p)return;
     S.extra=(S.extra||[]);const c=$('#pc').value;S.extra.push({id:'u'+Date.now(),n,cat:c,by:'Pak Joko · Taman Sari',p,a:'#1d2a73',b:'#3a1f5a',ic:c==='Busana'?'shirt':c==='Suvenir'?'key':'cloth'});save();toast('Produk diterbitkan');render(true)});
-  window.scrollTo(0,keep?y:0);paintChips();
+  window.scrollTo(0,keep?y:0);paintChips();FX.init(route,keep);
 }
 function startCD(){
   const m=MATCHES[0];const tick=()=>{const el=$('#cd');if(!el)return;let d=Math.max(0,m.date-Date.now());const v=[Math.floor(d/DAY),Math.floor(d/36e5)%24,Math.floor(d/6e4)%60,Math.floor(d/1e3)%60];el.querySelectorAll('b').forEach((b,i)=>b.textContent=String(v[i]).padStart(2,'0'))};
@@ -673,6 +758,7 @@ const A={
   stop(d){if(window.speechSynthesis)speechSynthesis.cancel();speaking=false;cur=d.id;render(true)},
   lang(d){lang=d.v;if(speaking){speechSynthesis.cancel();speaking=false}render(true)},
   speak,
+  gostop(d){cur=d.id;loc.mode='sim';loc.idx=STOPS.findIndex(x=>x.id===d.id);location.hash='#jelajah'},
   simmode(){loc.mode='sim';render(true)},
   geo(){
     if(!navigator.geolocation){toast('Lokasi tidak tersedia, pakai mode simulasi');return}
@@ -706,6 +792,90 @@ const A={
     tvT=setInterval(()=>{s++;b.dataset.s=s;$('#pbar').style.width=Math.min(100,s/1.2)+'%';const mm=String(Math.floor(s/60)).padStart(2,'0'),ss=String(s%60).padStart(2,'0');$('#ptime').textContent=mm+':'+ss+' / '+b.dataset.d;if(s>=120){tvStop();b.textContent='Putar'}},1000);
   }
 };
+
+/* ---------- cinematic FX ---------- */
+const FX=(function(){
+  const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const fine=matchMedia('(hover:hover) and (pointer:fine)').matches;
+  const top=$('.top'),prog=$('#prog'),cv=$('#curtain'),cur=$('#cur');
+  let io=null,sy=scrollY,ly=sy,vel=0,dir=0,mx=innerWidth/2,my=innerHeight/2,cx=mx,cy=my,big=false,started=false;
+  const E={cine:null,hs:null,hsT:null,hsB:null,hsMax:0,mt:null,mtx:0,mtw:0};
+  const lerp=(a,b,t)=>a+(b-a)*t;
+  function count(el){
+    if(!el)return;const to=+el.dataset.to,suf=el.dataset.suf||'';
+    if(reduce){el.textContent=to+suf;return}
+    const t0=performance.now(),dur=1600;
+    (function st(t){const k=Math.min(1,(t-t0)/dur),e=1-Math.pow(1-k,4);el.textContent=Math.round(to*e)+suf;if(k<1)requestAnimationFrame(st)})(t0);
+  }
+  function layout(){
+    if(!E.hs)return;
+    if(reduce||innerWidth<10){E.hs.classList.add('native');return}
+    E.hsMax=Math.max(0,E.hsT.scrollWidth-innerWidth);
+    E.hs.style.height=(E.hsMax+innerHeight)+'px';
+    if(E.mt)E.mtw=E.mt.scrollWidth/2;
+  }
+  function init(route,keep){
+    if(io)io.disconnect();
+    document.body.classList.toggle('home',route==='beranda');
+    const view=$('#view');
+    E.cine=view.querySelector('.cine');E.hs=view.querySelector('#hs');E.hsT=view.querySelector('#hsT');E.hsB=view.querySelector('#hsB');E.mt=view.querySelector('#mt');E.mtx=0;
+    layout();setTimeout(layout,500);setTimeout(layout,1500);
+    const stats=view.querySelectorAll('.stat .count');
+    if(!reduce){
+      io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;const el=e.target;el.classList.add('in');io.unobserve(el);
+        if(el.classList.contains('stat'))count(el.querySelector('.count'));
+        setTimeout(()=>{el.style.setProperty('--d','0ms');el.classList.add('done')},1400)}),{rootMargin:'0px 0px -6% 0px',threshold:.06});
+      view.querySelectorAll('.sec-h,.card,.incl>div,.fx,.panel,.split,.page-h>*,.map,.viewer,.pass,.stat,.stats .stat').forEach(el=>{
+        if(el.closest('.hs'))return;
+        const i=[...el.parentNode.children].indexOf(el);el.style.setProperty('--d',Math.min(i,5)*90+'ms');
+        if(!keep)el.classList.add('rv');else el.classList.add('rv','in','done');
+        if(!keep)io.observe(el);
+      });
+      if(keep)stats.forEach(c=>c.textContent=c.dataset.to+(c.dataset.suf||''));
+      else stats.forEach(c=>{c.textContent='0'+(c.dataset.suf||'')});
+    }
+    const tilt=view.querySelector('#tilt');
+    if(tilt&&fine&&!reduce){
+      tilt.parentNode.addEventListener('mousemove',e=>{const r=tilt.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;tilt.style.transform=`rotateY(${x*10}deg) rotateX(${-y*8}deg)`});
+      tilt.parentNode.addEventListener('mouseleave',()=>{tilt.style.transform=''});
+    }
+    if(!started){started=true;requestAnimationFrame(loop)}
+  }
+  function go(fn){
+    if(reduce){fn();return}
+    cv.style.transition='none';cv.style.transform='translateY(101%)';void cv.offsetHeight;
+    cv.style.transition='transform .5s cubic-bezier(.7,0,.2,1)';cv.style.transform='translateY(0)';
+    setTimeout(()=>{fn();cv.style.transition='transform .65s cubic-bezier(.7,0,.2,1)';cv.style.transform='translateY(-101%)'},540);
+  }
+  function loop(){
+    requestAnimationFrame(loop);
+    sy=scrollY;const d=sy-ly;ly=sy;vel=lerp(vel,d,.12);if(Math.abs(d)>3)dir=d>0?1:-1;
+    const max=Math.max(1,document.documentElement.scrollHeight-innerHeight);
+    prog.style.transform='scaleX('+Math.min(1,sy/max)+')';
+    const home=document.body.classList.contains('home');
+    top.classList.toggle('clear',home&&sy<60);
+    top.classList.toggle('hide',sy>320&&dir>0);
+    if(E.cine&&sy<innerHeight*1.4&&!reduce)E.cine.style.setProperty('--sy',sy);
+    if(E.hs&&!reduce&&!E.hs.classList.contains('native')){
+      const r=E.hs.getBoundingClientRect();const p=Math.min(1,Math.max(0,-r.top/Math.max(1,r.height-innerHeight)));
+      E.hsT.style.transform='translate3d('+(-p*E.hsMax)+'px,0,0)';E.hsB.style.transform='scaleX('+p+')';
+    }
+    if(E.mt&&E.mtw&&!reduce){E.mtx-=0.7+Math.abs(vel)*0.4;if(E.mtx<=-E.mtw)E.mtx+=E.mtw;E.mt.style.transform='translate3d('+E.mtx+'px,0,0)'}
+    if(fine&&!reduce){cx=lerp(cx,mx,.2);cy=lerp(cy,my,.2);cur.style.transform='translate3d('+cx+'px,'+cy+'px,0) translate(-50%,-50%) scale('+(big?1.7:1)+')'}
+  }
+  if(fine&&!reduce){
+    addEventListener('mousemove',e=>{
+      mx=e.clientX;my=e.clientY;cur.classList.add('on');
+      if(E.cine){const r=E.cine.getBoundingClientRect();if(r.bottom>0){E.cine.style.setProperty('--gx',((e.clientX-r.left)/r.width*100)+'%');E.cine.style.setProperty('--gy',((e.clientY-r.top)/r.height*100)+'%')}}
+      document.querySelectorAll('.mag').forEach(b=>{const r=b.getBoundingClientRect(),dx=e.clientX-(r.left+r.width/2),dy=e.clientY-(r.top+r.height/2);
+        if(Math.abs(dx)<r.width/2+50&&Math.abs(dy)<r.height/2+50)b.style.transform='translate('+dx*.22+'px,'+dy*.3+'px)';else if(b.style.transform)b.style.transform=''});
+    },{passive:true});
+    addEventListener('mouseover',e=>{big=!!e.target.closest('a,button,[data-act],input,select')});
+    document.addEventListener('mouseleave',()=>cur.classList.remove('on'));
+  }
+  addEventListener('resize',layout);
+  return {init,go};
+})();
 document.addEventListener('click',e=>{
   if(e.target===$('#modal')){closeModal();return}
   const t=e.target.closest('[data-act]');if(!t)return;
@@ -716,7 +886,7 @@ document.addEventListener('keydown',e=>{
   if((e.key==='Enter'||e.key===' ')&&e.target.matches&&e.target.matches('[role=button][data-act]')){e.preventDefault();e.target.click()}
 });
 document.addEventListener('input',e=>{if(e.target.dataset.chg==='sim'){loc.idx=+e.target.value;cur=STOPS[loc.idx].id;render(true);const s=$('#sim');s&&s.focus()}});
-window.addEventListener('hashchange',()=>{if(!$('#modal').hidden)closeModal();if('speechSynthesis' in window)speechSynthesis.cancel();speaking=false;render()});
+window.addEventListener('hashchange',()=>{if(!$('#modal').hidden)closeModal();if('speechSynthesis' in window)speechSynthesis.cancel();speaking=false;FX.go(()=>render())});
 render();
 })();
 </script>
