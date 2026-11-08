@@ -1,0 +1,724 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>M-Experience Mataram</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: sticky top nav, editorial sections on a 1180px column; image-led cards with kawung batik overlay, as on a club media site. */
+:root{
+  --bg:#f1f2f6; --surface:#ffffff; --surface2:#e7e9f1; --ink:#12183a; --muted:#59607f; --line:#d5d8e6;
+  --indigo:#1d2a73; --indigo-ink:#ffffff; --soga:#9a4f2b; --gold:#c9972f; --ok:#1f7a4d; --warn:#b4531a;
+  --display:'Young Serif',Georgia,serif; --body:'Instrument Sans',system-ui,sans-serif; --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0c1127; --surface:#141b3b; --surface2:#1c2550; --ink:#eceffc; --muted:#a2a9cb; --line:#2a3566;
+  --indigo:#7f90f5; --indigo-ink:#0c1127; --soga:#d98a5f; --gold:#e3b24f; --ok:#4fc58a; --warn:#f0925a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0c1127; --surface:#141b3b; --surface2:#1c2550; --ink:#eceffc; --muted:#a2a9cb; --line:#2a3566;
+  --indigo:#7f90f5; --indigo-ink:#0c1127; --soga:#d98a5f; --gold:#e3b24f; --ok:#4fc58a; --warn:#f0925a; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:400 16px/1.55 var(--body);margin:0}
+a{color:inherit}
+h1,h2,h3{font-family:var(--display);font-weight:400;line-height:1.12;margin:0;text-wrap:balance}
+h1{font-size:clamp(2.3rem,6vw,4.4rem)} h2{font-size:clamp(1.6rem,3.4vw,2.4rem)} h3{font-size:1.2rem}
+p{margin:0}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.eyebrow{font:600 .74rem/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--soga)}
+.muted{color:var(--muted)}
+.mono{font-family:var(--mono)}
+.num{font-variant-numeric:tabular-nums}
+
+/* top bar */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--indigo)}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--indigo);color:var(--indigo-ink)}
+.top .wrap{display:flex;align-items:center;gap:18px;height:62px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font:400 1.15rem var(--display);white-space:nowrap}
+.brand svg{width:30px;height:30px;flex:none}
+.nav{display:flex;gap:2px;margin-left:12px;flex:1;min-width:0;overflow-x:auto;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav a{padding:8px 12px;border-radius:6px;text-decoration:none;font-weight:600;font-size:.92rem;white-space:nowrap;opacity:.85}
+.nav a:hover,.nav a[aria-current="page"]{background:rgba(255,255,255,.16);opacity:1}
+:root[data-theme="dark"] .nav a:hover,:root[data-theme="dark"] .nav a[aria-current="page"]{background:rgba(0,0,0,.15)}
+.tools{display:flex;gap:8px;align-items:center}
+.chip{border:1px solid currentColor;background:transparent;border-radius:99px;padding:5px 12px;font:600 .8rem var(--mono);cursor:pointer;white-space:nowrap;color:inherit;opacity:.95}
+.chip b{font-weight:600}
+@media(max-width:720px){.brand span{display:none}.top .wrap{gap:8px}.nav{margin-left:0}}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:8px;padding:12px 20px;font-weight:700;cursor:pointer;text-decoration:none;background:var(--indigo);color:var(--indigo-ink);font-size:.96rem}
+.btn:hover{filter:brightness(1.08)}
+.btn.gold{background:var(--gold);color:#1a1405}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 2px var(--line)}
+.btn.sm{padding:8px 14px;font-size:.86rem}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.hero .btn.ghost{color:#fff;box-shadow:inset 0 0 0 2px rgba(255,255,255,.5)}
+
+/* batik art */
+.art{position:relative;overflow:hidden;background:linear-gradient(135deg,var(--a,#1d2a73),var(--b,#0f1748));color:#fff}
+.art::before{content:"";position:absolute;inset:0;opacity:.22;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 44 44' fill='none' stroke='white' stroke-width='1.3'%3E%3Cellipse cx='22' cy='11' rx='6.5' ry='11'/%3E%3Cellipse cx='22' cy='33' rx='6.5' ry='11'/%3E%3Cellipse cx='11' cy='22' rx='11' ry='6.5'/%3E%3Cellipse cx='33' cy='22' rx='11' ry='6.5'/%3E%3C/svg%3E")}
+.art>*{position:relative}
+.art .tag{position:absolute;left:12px;top:12px;background:rgba(0,0,0,.45);padding:3px 9px;border-radius:99px;font:600 .68rem var(--mono);letter-spacing:.08em;text-transform:uppercase}
+
+/* hero */
+.hero{--a:#1d2a73;--b:#0a1040;color:#fff}
+.hero .wrap{display:grid;grid-template-columns:1.25fr 1fr;gap:40px;padding-block:64px 56px;align-items:center}
+.hero h1 em{font-style:normal;color:var(--gold)}
+.hero p.lead{font-size:1.12rem;max-width:52ch;opacity:.9;margin-top:18px}
+.hero .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.matchcard{background:rgba(8,12,40,.62);border:1px solid rgba(255,255,255,.22);border-radius:14px;padding:22px;backdrop-filter:blur(6px)}
+.matchcard .vs{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:14px 0 18px;font:400 1.25rem var(--display)}
+.matchcard .vs span{min-width:0}
+.cd{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center}
+.cd div{background:rgba(255,255,255,.1);border-radius:8px;padding:10px 0}
+.cd b{display:block;font:600 1.6rem var(--mono)}
+.cd small{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;opacity:.75}
+@media(max-width:860px){.hero .wrap{grid-template-columns:1fr;padding-block:40px}}
+
+/* sections */
+.sec{padding-block:64px}
+.sec.alt{background:var(--surface2)}
+.sec-h{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:28px;flex-wrap:wrap}
+.sec-h .eyebrow{display:block;margin-bottom:10px}
+.grid{display:grid;gap:20px}
+.g3{grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr))}
+.g4{grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr))}
+.g2{grid-template-columns:repeat(auto-fill,minmax(min(100%,420px),1fr))}
+.card{background:var(--surface);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;min-width:0;box-shadow:0 1px 0 var(--line),0 0 0 1px var(--line)}
+.card .art{aspect-ratio:16/9;display:flex;align-items:flex-end;padding:14px;font:400 1.25rem/1.15 var(--display)}
+.card .body{padding:16px 18px 18px;display:flex;flex-direction:column;gap:8px;flex:1}
+.card .body .row{margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:10px;padding-top:6px}
+.price{font:600 1.05rem var(--mono)}
+.meta{font:500 .78rem var(--mono);color:var(--muted);letter-spacing:.04em}
+
+/* fixtures */
+.fixtures{display:flex;flex-direction:column;background:var(--surface);border-radius:12px;box-shadow:0 0 0 1px var(--line);overflow:hidden}
+.fx{display:grid;grid-template-columns:92px 1fr auto;gap:18px;align-items:center;padding:16px 20px;border-top:1px solid var(--line)}
+.fx:first-child{border-top:0}
+.fx .d{font:600 .8rem/1.3 var(--mono);color:var(--soga);text-transform:uppercase}
+.fx .d b{display:block;font:400 1.7rem var(--display);color:var(--ink)}
+.fx .t{font:400 1.15rem var(--display);min-width:0}
+.fx .t small{display:block;font:500 .78rem var(--mono);color:var(--muted);margin-top:2px}
+@media(max-width:560px){.fx{grid-template-columns:70px 1fr;}.fx .btn{grid-column:1/-1}}
+
+/* pass inclusion */
+.incl{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:2px;background:var(--line);border-radius:12px;overflow:hidden}
+.incl>div{background:var(--surface);padding:22px;display:flex;flex-direction:column;gap:8px}
+.incl svg{width:34px;height:34px;stroke:var(--indigo);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+
+/* split bar */
+.split{display:flex;height:46px;border-radius:8px;overflow:hidden;font:600 .8rem var(--mono);color:#fff}
+.split div{display:flex;align-items:center;justify-content:center;min-width:0;overflow:hidden}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:12px;font-size:.88rem;color:var(--muted)}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.c-perajin{background:#1d2a73}.c-klub{background:#9a4f2b}.c-dev{background:#4a5a78}.c-dana{background:#2a7a58}
+:root[data-theme="dark"] .c-perajin{background:#4a5bd0}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .c-perajin{background:#4a5bd0}}
+
+/* forms */
+.panel{background:var(--surface);border-radius:12px;box-shadow:0 0 0 1px var(--line);padding:22px}
+.stack{display:flex;flex-direction:column;gap:16px}
+.lbl{font:600 .74rem var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opt{border:1.5px solid var(--line);background:var(--surface);border-radius:8px;padding:9px 14px;cursor:pointer;font-weight:600;font-size:.9rem;text-align:left}
+.opt small{display:block;font:500 .74rem var(--mono);color:var(--muted)}
+.opt[aria-pressed="true"]{border-color:var(--indigo);background:var(--surface2);box-shadow:inset 0 0 0 1px var(--indigo)}
+input[type=text],input[type=number],select,textarea{width:100%;background:var(--bg);border:1.5px solid var(--line);border-radius:8px;padding:10px 12px}
+.qty{display:inline-flex;align-items:center;border:1.5px solid var(--line);border-radius:8px;overflow:hidden}
+.qty button{border:0;background:var(--surface2);width:40px;height:40px;cursor:pointer;font-size:1.2rem}
+.qty span{width:48px;text-align:center;font:600 1rem var(--mono)}
+.sum{display:flex;flex-direction:column;gap:8px;font-size:.95rem}
+.sum .r{display:flex;justify-content:space-between;gap:12px}
+.sum .tot{font:600 1.3rem var(--mono);border-top:1px dashed var(--line);padding-top:12px;margin-top:4px}
+.two{display:grid;grid-template-columns:1.4fr 1fr;gap:24px;align-items:start}
+@media(max-width:900px){.two{grid-template-columns:1fr}}
+.page-h{padding-block:44px 28px}
+.page-h p{max-width:62ch;margin-top:12px;color:var(--muted)}
+
+/* pass ticket */
+.pass{display:grid;grid-template-columns:1fr auto;border-radius:14px;overflow:hidden;box-shadow:0 0 0 1px var(--line);background:var(--surface)}
+.pass .l{padding:22px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.pass .r{padding:22px;border-left:2px dashed var(--line);display:flex;flex-direction:column;align-items:center;gap:8px;background:#fff;color:#111}
+.pass .r .qr{width:176px;height:176px}
+.pass .r .qr img,.pass .r .qr canvas{max-width:100%;height:auto}
+.bar{height:5px;background:#dde;border-radius:3px;width:100%;overflow:hidden}
+.bar i{display:block;height:100%;background:#1d2a73;transition:width 1s linear}
+.pass .inc{display:flex;gap:6px;flex-wrap:wrap}
+.pill{font:600 .72rem var(--mono);padding:3px 9px;border-radius:99px;background:var(--surface2);letter-spacing:.04em}
+.pill.ok{background:color-mix(in srgb,var(--ok) 22%,transparent);color:var(--ok)}
+@media(max-width:600px){.pass{grid-template-columns:1fr}.pass .r{border-left:0;border-top:2px dashed var(--line)}}
+
+/* trail */
+.trail{display:grid;grid-template-columns:minmax(0,340px) 1fr;gap:28px;align-items:start}
+@media(max-width:900px){.trail{grid-template-columns:1fr}}
+.map{background:var(--surface);border-radius:12px;box-shadow:0 0 0 1px var(--line);padding:8px}
+.map svg{width:100%;height:auto;display:block}
+.map text{fill:var(--ink);font:600 12px var(--body)}
+.map .sub{fill:var(--muted);font:500 10px var(--mono)}
+.map .axis{stroke:var(--indigo);stroke-width:3;stroke-dasharray:2 7;stroke-linecap:round}
+.map .node{fill:var(--surface);stroke:var(--indigo);stroke-width:3;cursor:pointer}
+.map .node.on{fill:var(--gold);stroke:var(--soga)}
+.map .node.done{fill:var(--ok);stroke:var(--ok)}
+.map .me{fill:#e0334c;stroke:#fff;stroke-width:3}
+.viewer{height:300px;border-radius:12px;background:linear-gradient(180deg,#141d5a,#0a1040);position:relative;overflow:hidden;touch-action:none;cursor:grab}
+.viewer canvas{display:block;width:100%;height:100%}
+.viewer .hint{position:absolute;left:12px;bottom:10px;color:#fff;font:500 .72rem var(--mono);opacity:.75}
+.langs{display:flex;gap:6px;flex-wrap:wrap}
+.audio{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.story{font-size:1.05rem;max-width:62ch}
+.stamps{display:flex;gap:6px;flex-wrap:wrap}
+.stamp{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font:600 .74rem var(--mono);border:2px dashed var(--line);color:var(--muted)}
+.stamp.on{border:2px solid var(--ok);color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent)}
+input[type=range]{width:100%;accent-color:var(--indigo)}
+
+/* TV */
+.tvgrid .art{cursor:pointer}
+.tvgrid .play{position:absolute;right:14px;bottom:14px;width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.92);display:grid;place-items:center}
+.tvgrid .play::after{content:"";border-left:14px solid #1d2a73;border-top:9px solid transparent;border-bottom:9px solid transparent;margin-left:4px}
+.dur{position:absolute;right:12px;top:12px;background:rgba(0,0,0,.55);color:#fff;border-radius:4px;padding:2px 7px;font:600 .7rem var(--mono)}
+.player{aspect-ratio:16/9;border-radius:10px;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;font:400 1.6rem var(--display)}
+.scrub{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin-top:14px}
+.scrub i{display:block;height:100%;width:0;background:var(--gold)}
+
+/* market */
+.prod .art{aspect-ratio:1/1;display:grid;place-items:center}
+.prod .art svg{width:46%;fill:rgba(255,255,255,.92)}
+.cats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+
+/* modal */
+.modal{position:fixed;inset:0;z-index:100;background:rgba(5,8,28,.66);display:flex;align-items:center;justify-content:center;padding:16px}
+.modal[hidden]{display:none}
+.sheet{background:var(--surface);border-radius:14px;max-width:560px;width:100%;max-height:calc(100% - 20px);overflow:auto;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.sheet .head{display:flex;justify-content:space-between;align-items:start;gap:12px;margin-bottom:16px}
+.x{border:0;background:var(--surface2);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1.1rem;flex:none}
+.line-item{display:grid;grid-template-columns:1fr auto;gap:4px 12px;padding:12px 0;border-top:1px solid var(--line)}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:11px 18px;border-radius:99px;font-weight:600;z-index:120;font-size:.9rem;max-width:calc(100% - 32px)}
+.toast[hidden]{display:none}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font:600 .72rem var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.scroll-x{overflow-x:auto}
+.notice{font-size:.84rem;color:var(--muted);border-left:3px solid var(--gold);padding:4px 0 4px 12px}
+footer{background:var(--indigo);color:var(--indigo-ink);padding-block:44px calc(32px + env(safe-area-inset-bottom,0px))}
+footer .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:28px}
+footer h3{font-size:1rem;margin-bottom:10px}
+footer a{display:block;text-decoration:none;opacity:.85;padding:3px 0;font-size:.92rem}
+footer a:hover{opacity:1;text-decoration:underline}
+footer .fine{margin-top:28px;font-size:.8rem;opacity:.75;border-top:1px solid rgba(255,255,255,.25);padding-top:16px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="logo" viewBox="0 0 32 32"><circle cx="16" cy="16" r="15" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 4v24M16 4l-3 5h6zM9 20q7 5 14 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+</svg>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#beranda" aria-label="M-Experience, beranda"><svg><use href="#logo"/></svg><span>M-Experience</span></a>
+    <nav class="nav" id="nav" aria-label="Menu utama">
+      <a href="#beranda" data-r="beranda">Beranda</a>
+      <a href="#tiket" data-r="tiket">Tiket &amp; Pass</a>
+      <a href="#jelajah" data-r="jelajah">Jejak Sumbu</a>
+      <a href="#pasar" data-r="pasar">Pasar Batik</a>
+      <a href="#tv" data-r="tv">Mataram TV</a>
+      <a href="#berita" data-r="berita">Berita</a>
+      <a href="#pengrajin" data-r="pengrajin">Pengrajin</a>
+    </nav>
+    <div class="tools">
+      <button class="chip" data-act="cart" id="cartChip" aria-label="Keranjang">Keranjang <b id="cartN">0</b></button>
+      <button class="chip" data-act="points" id="ptsChip" aria-label="Poin loyalti"><b id="pts">0</b> poin</button>
+      <button class="chip" data-act="theme" aria-label="Ganti tema">Tema</button>
+    </div>
+  </div>
+</header>
+
+<main id="view"></main>
+
+<footer>
+  <div class="wrap">
+    <div class="cols">
+      <div><h3>Mataram Heritage Matchday</h3><p style="opacity:.85;font-size:.92rem">Tiket laga PSIM Yogyakarta, jejak Sumbu Filosofis, pasar batik, dan Mataram TV dalam satu web.</p></div>
+      <div><h3>Jelajah</h3><a href="#tiket">Tiket &amp; Heritage Pass</a><a href="#jelajah">Jejak Sumbu Filosofis</a><a href="#tv">Mataram TV</a></div>
+      <div><h3>Belanja</h3><a href="#pasar">Pasar Batik Mataram</a><a href="#pengrajin">Dashboard pengrajin</a></div>
+      <div><h3>Kebijakan</h3><a href="#berita">Privasi &amp; PDP (UU 27/2022)</a><a href="#berita">Syarat tiket</a></div>
+    </div>
+    <p class="fine">Prototipe MVP berdasarkan PRD M-Experience. Jadwal, harga, berita, dan pembayaran di halaman ini adalah data contoh dan simulasi. Belum ada transaksi nyata.</p>
+  </div>
+</footer>
+
+<div class="modal" id="modal" hidden><div class="sheet" id="sheet" role="dialog" aria-modal="true"></div></div>
+<div class="toast" id="toast" hidden></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+'use strict';
+/* ---------- util & state ---------- */
+const $=s=>document.querySelector(s);
+const rp=n=>new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0}).format(n);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const KEY='mx-state-v1';
+let S={points:0,passes:[],cart:[],orders:[],checkins:[],theme:'',userProducts:[]};
+try{const r=localStorage.getItem(KEY);if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function applyTheme(){if(S.theme)document.documentElement.setAttribute('data-theme',S.theme);else document.documentElement.removeAttribute('data-theme')}
+applyTheme();
+let toastT;function toast(m){const t=$('#toast');t.textContent=m;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>t.hidden=true,2600)}
+function addPoints(n){S.points+=n;save();paintChips()}
+function paintChips(){$('#pts').textContent=S.points;$('#cartN').textContent=S.cart.reduce((a,c)=>a+c.q,0)}
+
+/* ---------- data (contoh) ---------- */
+const DAY=864e5;
+function at(days,h,m){const d=new Date(Date.now()+days*DAY);d.setHours(h,m,0,0);return d}
+const MATCHES=[
+  {id:'m1',home:true,opp:'Persebaya Surabaya',comp:'Liga 1 · Pekan ke-12',date:at(9,15,30),big:true},
+  {id:'m2',home:true,opp:'Arema FC',comp:'Liga 1 · Pekan ke-14',date:at(23,19,0),big:true},
+  {id:'m3',home:true,opp:'PSS Sleman',comp:'Derby Jogja · Pekan ke-16',date:at(37,15,30),big:true},
+  {id:'m4',home:true,opp:'Persis Solo',comp:'Liga 1 · Pekan ke-18',date:at(51,16,0),big:false}
+];
+const TIERS=[
+  {id:'eko',name:'Tribun Ekonomi',price:60000},
+  {id:'utama',name:'Tribun Utama',price:120000},
+  {id:'vip',name:'Tribun VIP',price:275000}
+];
+const ADD={museum:{name:'Akses cagar budaya / museum',price:25000},gudeg:{name:'Voucher gudeg',price:35000},bakpia:{name:'Voucher bakpia',price:22000}};
+const PAYS=['QRIS','GoPay','OVO','ShopeePay','VA BCA','VA Mandiri'];
+const NEWS=[
+  {t:'Heritage Matchday Pass resmi dibuka untuk laga kandang',c:'Tiket',a:'#1d2a73',b:'#0a1040',d:'Satu pemesanan kini mencakup tiket Stadion Mandala Krida, akses situs cagar budaya, dan voucher kuliner. Kode QR terenkripsi tampil langsung di layar ponsel dan dipindai di gerbang stadion maupun museum.'},
+  {t:'Tur audio Sumbu Filosofis tersedia dalam tiga bahasa',c:'Budaya',a:'#8a4524',b:'#4a210f',d:'Narasi sejarah dapat didengar dalam Bahasa Indonesia, Bahasa Jawa Halus, dan Bahasa Inggris. Pengunjung cukup membuka web dari ponsel saat berada di Panggung Krapyak, Keraton, atau Tugu.'},
+  {t:'Koleksi jersey batik edisi Laskar Mataram masuk katalog',c:'Pasar',a:'#2a5a52',b:'#0f2c29',d:'Motif kawung dan parang diolah pengrajin Taman Sari dan Malioboro. Setiap pembelian membagi pembayaran otomatis ke pengrajin, kas klub, pengembang platform, dan dana pelestarian budaya.'},
+  {t:'Dokumenter pendirian PSSI 1930 tayang perdana di Mataram TV',c:'TV',a:'#5a2c6e',b:'#26113a',d:'Film dokumenter ini menelusuri awal sepak bola Mataram dan peran Yogyakarta dalam pembentukan PSSI pada 1930, lengkap dengan arsip foto dan narasi dua bahasa.'},
+  {t:'Mode luring untuk peta panduan dan tiket QR',c:'Teknologi',a:'#34406e',b:'#141c3f',d:'Versi PWA menyimpan peta panduan dan tiket di perangkat sehingga tetap bisa dibuka saat sinyal di sekitar stadion tidak stabil. Pasang ke layar utama untuk pengalaman seperti aplikasi.'},
+  {t:'Pengrajin batik bergabung sebagai mitra royalti otomatis',c:'UMKM',a:'#7a3a1a',b:'#3d1a0a',d:'Pengrajin mengelola etalase sendiri dan menerima 70% dari setiap penjualan lewat pembagian otomatis di gateway pembayaran, tanpa perlu rekap manual.'}
+];
+const PRODUCTS=[
+  {id:'p1',n:'Jersey Batik Laskar Mataram',cat:'Busana',by:'Pak Joko · Taman Sari',p:385000,a:'#1d2a73',b:'#0a1040',ic:'shirt'},
+  {id:'p2',n:'Kemeja Batik Parang Rusak',cat:'Busana',by:'Bu Sri · Malioboro',p:295000,a:'#8a4524',b:'#4a210f',ic:'shirt'},
+  {id:'p3',n:'Syal Suporter Kawung',cat:'Suvenir',by:'Pak Joko · Taman Sari',p:95000,a:'#2a5a52',b:'#0f2c29',ic:'scarf'},
+  {id:'p4',n:'Tas Kanvas Batik Tulis',cat:'Kriya',by:'Bu Sri · Malioboro',p:175000,a:'#5a2c6e',b:'#26113a',ic:'bag'},
+  {id:'p5',n:'Kain Panjang Batik Tulis Sogan',cat:'Kriya',by:'Pak Joko · Taman Sari',p:650000,a:'#7a3a1a',b:'#3d1a0a',ic:'cloth'},
+  {id:'p6',n:'Gantungan Kunci Tugu Jogja',cat:'Suvenir',by:'Mas Dwi · Kotagede',p:25000,a:'#34406e',b:'#141c3f',ic:'key'},
+  {id:'p7',n:'Kaos Batik Sumbu Filosofis',cat:'Busana',by:'Bu Sri · Malioboro',p:165000,a:'#1d2a73',b:'#3a1f5a',ic:'shirt'},
+  {id:'p8',n:'Perak Kotagede Liontin Garuda',cat:'Kriya',by:'Mas Dwi · Kotagede',p:320000,a:'#455064',b:'#1b2230',ic:'ring'}
+];
+const IC={
+  shirt:'<svg viewBox="0 0 64 64"><path d="M22 6l-16 8 6 14 6-3v33h28V25l6 3 6-14-16-8c-2 5-6 7-10 7s-8-2-10-7z"/></svg>',
+  scarf:'<svg viewBox="0 0 64 64"><path d="M14 8h36v10H38v38l-8 4-8-4V18H14z"/></svg>',
+  bag:'<svg viewBox="0 0 64 64"><path d="M12 22h40l4 36H8zM22 22v-4a10 10 0 0120 0v4h-4v-4a6 6 0 00-12 0v4z" fill-rule="evenodd"/></svg>',
+  cloth:'<svg viewBox="0 0 64 64"><path d="M10 12h44l-4 20 4 20H10l4-20z"/></svg>',
+  key:'<svg viewBox="0 0 64 64"><path d="M32 4l6 14h-4v12h6v6h-6v6h8v6H26v-6h6V12h-4z"/></svg>',
+  ring:'<svg viewBox="0 0 64 64"><path d="M32 6l10 12-10 40L22 18z"/></svg>'
+};
+const TV=[
+  {id:'v1',t:'Lahirnya PSSI 1930: Dari Mataram untuk Nusantara',k:'Dokumenter',d:'42:10',a:'#1d2a73',b:'#0a1040'},
+  {id:'v2',t:'Behind the Scenes: Hari Pertandingan Laskar Mataram',k:'Tim PSIM',d:'18:45',a:'#8a4524',b:'#4a210f'},
+  {id:'v3',t:'Pak Joko dan Canting: Satu Kain, Tiga Bulan',k:'Pengrajin',d:'12:30',a:'#2a5a52',b:'#0f2c29'},
+  {id:'v4',t:'Menyusuri Sumbu Filosofis dari Krapyak ke Tugu',k:'Dokumenter',d:'28:05',a:'#5a2c6e',b:'#26113a'},
+  {id:'v5',t:'Latihan Pagi: Satu Hari Bersama Tim',k:'Tim PSIM',d:'09:20',a:'#34406e',b:'#141c3f'},
+  {id:'v6',t:'Bu Sri dan Motif Parang: Makna di Balik Garis',k:'Pengrajin',d:'14:50',a:'#7a3a1a',b:'#3d1a0a'}
+];
+const STOPS=[
+  {id:'krapyak',n:'Panggung Krapyak',sub:'Ujung selatan',lat:-7.8326,lng:110.3647,x:180,y:470,m:'pendopo',
+   s:{id:'Panggung Krapyak berada di ujung selatan Sumbu Filosofis. Dari sini garis imajiner menuju Keraton dan Tugu dibaca sebagai perjalanan hidup manusia.',en:'Panggung Krapyak stands at the southern end of the Philosophical Axis. From here the line to the Keraton and Tugu is read as the journey of human life.',jv:'Panggung Krapyak ngadeg ing pucuk kidul Sumbu Filosofis. Saking mriki garis tumuju Karaton lan Tugu dipun maknani minangka lampahing gesang.'}},
+  {id:'kidul',n:'Alun-Alun Kidul',sub:'Belakang Keraton',lat:-7.8118,lng:110.3631,x:180,y:385,m:'pendopo',
+   s:{id:'Alun-Alun Selatan berada di belakang Keraton. Tradisi masangin, berjalan menutup mata di antara dua beringin, masih digemari pengunjung.',en:'The South Square lies behind the Keraton. The masangin tradition, walking blindfolded between two banyan trees, is still popular with visitors.',jv:'Alun-Alun Kidul wonten wingking Karaton. Tradhisi masangin taksih remen dipun lampahi para tamu.'}},
+  {id:'keraton',n:'Keraton Ngayogyakarta',sub:'Pusat Sumbu',lat:-7.8053,lng:110.3642,x:180,y:300,m:'pendopo',
+   s:{id:'Keraton Ngayogyakarta berdiri sejak 1755 sebagai pusat pemerintahan dan budaya Kesultanan Yogyakarta, pewaris tradisi Mataram.',en:'The Keraton Ngayogyakarta has stood since 1755 as the seat of government and culture of the Yogyakarta Sultanate, heir to the Mataram tradition.',jv:'Karaton Ngayogyakarta jumeneng wiwit 1755, dados pusat pamarentahan lan kabudayan Kasultanan Ngayogyakarta.'}},
+  {id:'malioboro',n:'Malioboro',sub:'Poros dagang',lat:-7.7926,lng:110.3658,x:180,y:200,m:'pendopo',
+   s:{id:'Malioboro adalah poros perdagangan di sisi utara Keraton. Di sekitarnya pengrajin batik dan penjual kuliner tradisional menjajakan karya mereka.',en:'Malioboro is the trading spine north of the Keraton. Around it, batik artisans and traditional food sellers offer their work.',jv:'Malioboro punika margi dagang ing sisih lor Karaton. Para pengrajin batik lan kuliner tradhisional adol asil karyanipun ing mriku.'}},
+  {id:'tugu',n:'Tugu Yogyakarta',sub:'Ujung utara',lat:-7.7829,lng:110.3671,x:180,y:90,m:'tugu',
+   s:{id:'Tugu Yogyakarta dibangun pada 1756. Setelah roboh akibat gempa 1867, bangunan ini didirikan kembali pada 1889 dengan bentuk yang kita kenal sekarang.',en:'Tugu Yogyakarta was built in 1756. After collapsing in the 1867 earthquake, it was rebuilt in 1889 in the form we know today.',jv:'Tugu Yogyakarta dipun bangun taun 1756. Sasampunipun risak ing lindhu 1867, dipun jumenengaken malih taun 1889.'}},
+  {id:'mandala',n:'Stadion Mandala Krida',sub:'Kandang PSIM',lat:-7.7916,lng:110.3869,x:305,y:150,m:'stadion',
+   s:{id:'Stadion Mandala Krida adalah kandang PSIM Yogyakarta. PSIM berdiri pada 1929, dan pada 1930 PSSI lahir di Yogyakarta.',en:'Mandala Krida Stadium is the home of PSIM Yogyakarta. PSIM was founded in 1929, and in 1930 the PSSI was born in Yogyakarta.',jv:'Stadion Mandala Krida punika kandhang PSIM Yogyakarta. PSIM jumeneng taun 1929, lan PSSI lair ing Ngayogyakarta taun 1930.'}}
+];
+
+/* ---------- helpers ---------- */
+function cleanup(){}
+let teardown=[];
+function onLeave(f){teardown.push(f)}
+function fmtDate(d){return new Intl.DateTimeFormat('id-ID',{weekday:'short',day:'numeric',month:'short'}).format(d)}
+function fmtTime(d){return new Intl.DateTimeFormat('id-ID',{hour:'2-digit',minute:'2-digit',hour12:false}).format(d).replace('.',':')}
+function hav(a,b,c,d){const R=6371000,t=x=>x*Math.PI/180,dl=t(c-a),dn=t(d-b);const q=Math.sin(dl/2)**2+Math.cos(t(a))*Math.cos(t(c))*Math.sin(dn/2)**2;return 2*R*Math.asin(Math.sqrt(q))}
+function artStyle(o){return `--a:${o.a};--b:${o.b}`}
+function matchLabel(m){return 'PSIM Yogyakarta vs '+m.opp}
+
+/* ---------- pages ---------- */
+const P={};
+let tk={matchId:'m1',tier:'utama',qty:2,museum:true,food:'gudeg',pay:'QRIS',passIdx:0};
+
+P.beranda=()=>{
+  const m=MATCHES[0];
+  return `
+<section class="hero art" style="${artStyle({a:'#1d2a73',b:'#0a1040'})}"><div class="wrap">
+  <div>
+    <span class="eyebrow" style="color:var(--gold)">PSIM Yogyakarta · Laskar Mataram</span>
+    <h1 style="margin-top:14px">Dari Tugu ke <em>Mandala Krida</em>, satu perjalanan.</h1>
+    <p class="lead">Beli tiket laga kandang, telusuri Sumbu Filosofis Yogyakarta, belanja batik pengrajin Mataram, dan tonton Mataram TV. Semua lewat browser, tanpa unduh aplikasi.</p>
+    <div class="cta"><a class="btn gold" href="#tiket">Beli Heritage Pass</a><a class="btn ghost" href="#jelajah">Mulai jejak budaya</a></div>
+  </div>
+  <div class="matchcard">
+    <span class="eyebrow" style="color:var(--gold)">${esc(m.comp)}</span>
+    <div class="vs"><span>PSIM</span><span style="font:600 .8rem var(--mono);opacity:.7">VS</span><span style="text-align:right">${esc(m.opp.split(' ')[0])}</span></div>
+    <div class="cd" id="cd" aria-live="off"><div><b>00</b><small>hari</small></div><div><b>00</b><small>jam</small></div><div><b>00</b><small>menit</small></div><div><b>00</b><small>detik</small></div></div>
+    <p class="meta" style="margin:14px 0;color:#fff;opacity:.8">${fmtDate(m.date)} · ${fmtTime(m.date)} WIB · Stadion Mandala Krida</p>
+    <button class="btn gold" style="width:100%" data-act="buy" data-id="${m.id}">Pesan tiket laga ini</button>
+  </div>
+</div></section>
+
+<section class="sec"><div class="wrap">
+  <div class="sec-h"><div><span class="eyebrow">Berita terbaru</span><h2>Kabar dari Laskar Mataram</h2></div><a class="btn ghost sm" href="#berita">Semua berita</a></div>
+  <div class="grid g3">${NEWS.slice(0,3).map(newsCard).join('')}</div>
+</div></section>
+
+<section class="sec alt"><div class="wrap">
+  <div class="sec-h"><div><span class="eyebrow">Jadwal laga kandang</span><h2>Pertandingan berikutnya</h2></div><a class="btn ghost sm" href="#tiket">Pilih tiket</a></div>
+  ${fixturesHTML()}
+</div></section>
+
+<section class="sec"><div class="wrap">
+  <div class="sec-h"><div><span class="eyebrow">Heritage Matchday Pass</span><h2>Satu pemesanan, tiga pengalaman</h2></div></div>
+  <div class="incl">
+    <div><svg viewBox="0 0 32 32"><path d="M4 11h24v4a3 3 0 000 6v4H4v-4a3 3 0 000-6z"/><path d="M20 11v14" stroke-dasharray="2 3"/></svg><h3>Tiket stadion</h3><p class="muted">Kursi di Stadion Mandala Krida untuk laga kandang PSIM.</p></div>
+    <div><svg viewBox="0 0 32 32"><path d="M3 13l13-8 13 8M6 13v11M12 13v11M20 13v11M26 13v11M3 27h26"/></svg><h3>Situs cagar budaya</h3><p class="muted">Akses museum dan situs warisan di sepanjang Sumbu Filosofis.</p></div>
+    <div><svg viewBox="0 0 32 32"><path d="M6 17h20a10 10 0 01-20 0zM11 12c0-3 3-3 3-6M18 12c0-3 3-3 3-6"/></svg><h3>Voucher kuliner</h3><p class="muted">Gudeg atau bakpia khas Yogyakarta dari UMKM mitra.</p></div>
+    <div><svg viewBox="0 0 32 32"><path d="M4 4h8v8H4zM20 4h8v8h-8zM4 20h8v8H4zM20 20h3v3h-3zM25 25h3v3h-3zM20 26h3M26 20h2"/></svg><h3>QR dinamis</h3><p class="muted">Kode terenkripsi di layar ponsel, dipindai di gerbang stadion dan museum.</p></div>
+  </div>
+</div></section>
+
+<section class="sec alt"><div class="wrap">
+  <div class="sec-h"><div><span class="eyebrow">Jejak budaya</span><h2>Dari Panggung Krapyak sampai Tugu</h2></div><a class="btn ghost sm" href="#jelajah">Buka peta</a></div>
+  <div class="grid g2" style="align-items:center">
+    <p class="story" style="font-size:1.12rem">Sumbu Filosofis Yogyakarta ditetapkan UNESCO sebagai Situs Warisan Dunia. Telusuri enam pemberhentian dengan narasi audio, model 3D, dan stempel check-in yang menambah poin loyalti.</p>
+    <div class="stamps">${STOPS.map((s,i)=>`<span class="stamp ${S.checkins.includes(s.id)?'on':''}" title="${esc(s.n)}">${i+1}</span>`).join('')}</div>
+  </div>
+</div></section>
+
+<section class="sec"><div class="wrap">
+  <div class="sec-h"><div><span class="eyebrow">Pasar Batik Mataram</span><h2>Dari tangan pengrajin</h2></div><a class="btn ghost sm" href="#pasar">Lihat katalog</a></div>
+  <div class="grid g4">${PRODUCTS.slice(0,4).map(prodCard).join('')}</div>
+  <div style="margin-top:40px"><h3 style="margin-bottom:14px">Ke mana uang Anda pergi</h3>${splitHTML()}</div>
+</div></section>
+
+<section class="sec alt"><div class="wrap">
+  <div class="sec-h"><div><span class="eyebrow">Mataram TV</span><h2>Tayangan sepanjang tahun</h2></div><a class="btn ghost sm" href="#tv">Semua tayangan</a></div>
+  <div class="grid g3 tvgrid">${TV.slice(0,3).map(tvCard).join('')}</div>
+</div></section>`};
+
+function newsCard(n,i){return `<article class="card"><div class="art" style="${artStyle(n)}"><span class="tag">${n.c}</span>${esc(n.t)}</div><div class="body"><p class="muted">${esc(n.d.slice(0,110))}…</p><div class="row"><button class="btn ghost sm" data-act="news" data-i="${NEWS.indexOf(n)}">Baca</button></div></div></article>`}
+function fixturesHTML(){return `<div class="fixtures">${MATCHES.map(m=>`<div class="fx"><div class="d">${fmtDate(m.date).split(' ')[0]}<b>${m.date.getDate()}</b>${new Intl.DateTimeFormat('id-ID',{month:'short'}).format(m.date)}</div><div class="t">PSIM Yogyakarta vs ${esc(m.opp)}<small>${esc(m.comp)} · ${fmtTime(m.date)} WIB${m.big?' · Laga besar':''}</small></div><button class="btn sm" data-act="buy" data-id="${m.id}">Beli tiket</button></div>`).join('')}</div>`}
+function prodCard(p){const mine=S.userProducts.includes(p.id);return `<article class="card prod"><div class="art" style="${artStyle(p)}"><span class="tag">${p.cat}</span>${IC[p.ic]}</div><div class="body"><h3>${esc(p.n)}</h3><span class="meta">${esc(p.by)}</span><div class="row"><span class="price">${rp(p.p)}</span><button class="btn sm" data-act="add" data-id="${p.id}">Tambah</button></div></div></article>`}
+function tvCard(v){return `<article class="card"><div class="art" style="${artStyle(v)};aspect-ratio:16/9;display:block;cursor:pointer" data-act="tv" data-id="${v.id}" role="button" tabindex="0" aria-label="Putar ${esc(v.t)}"><span class="tag">${v.k}</span><span class="dur">${v.d}</span><span class="play"></span></div><div class="body"><h3>${esc(v.t)}</h3></div></article>`}
+function splitHTML(){return `<div class="split" role="img" aria-label="Pembagian pembayaran: 70% pengrajin, 15% kas klub, 10% pengembang, 5% dana pelestarian budaya"><div class="c-perajin" style="flex:70">70%</div><div class="c-klub" style="flex:15">15%</div><div class="c-dev" style="flex:10">10%</div><div class="c-dana" style="flex:5">5%</div></div><div class="legend"><span><i class="c-perajin"></i>Pengrajin</span><span><i class="c-klub"></i>Kas Klub PSIM</span><span><i class="c-dev"></i>Pengembang platform</span><span><i class="c-dana"></i>Dana Pelestarian Budaya DIY</span></div>`}
+
+/* ---- tiket ---- */
+function ticketTotal(){
+  const t=TIERS.find(x=>x.id===tk.tier);const lines=[{n:`${t.name} × ${tk.qty}`,v:t.price*tk.qty}];
+  if(tk.museum)lines.push({n:`${ADD.museum.name} × ${tk.qty}`,v:ADD.museum.price*tk.qty});
+  if(tk.food)lines.push({n:`${ADD[tk.food].name} × ${tk.qty}`,v:ADD[tk.food].price*tk.qty});
+  const sub=lines.reduce((a,l)=>a+l.v,0);const fee=Math.round(sub*0.01);
+  return {lines,sub,fee,total:sub+fee};
+}
+P.tiket=()=>{
+  const T=ticketTotal();const m=MATCHES.find(x=>x.id===tk.matchId);
+  const bundle=tk.museum||tk.food;
+  return `
+<div class="wrap page-h"><span class="eyebrow">Tiket &amp; Heritage Pass</span><h1 style="font-size:clamp(2rem,5vw,3.2rem);margin-top:10px">Pesan tiket laga, tambah pengalaman budaya</h1><p>Pilih laga, tribun, lalu gabungkan dengan akses cagar budaya dan voucher kuliner dalam satu kode QR.</p></div>
+<div class="wrap" style="padding-bottom:56px"><div class="two">
+  <div class="panel stack">
+    <div><span class="lbl">1 · Pilih laga</span><div class="opts">${MATCHES.map(x=>`<button class="opt" aria-pressed="${x.id===tk.matchId}" data-act="tk" data-k="matchId" data-v="${x.id}">vs ${esc(x.opp)}<small>${fmtDate(x.date)} · ${fmtTime(x.date)}</small></button>`).join('')}</div></div>
+    <div><span class="lbl">2 · Tribun</span><div class="opts">${TIERS.map(x=>`<button class="opt" aria-pressed="${x.id===tk.tier}" data-act="tk" data-k="tier" data-v="${x.id}">${x.name}<small>${rp(x.price)}</small></button>`).join('')}</div></div>
+    <div><span class="lbl">3 · Jumlah tiket</span><div class="qty"><button data-act="qty" data-d="-1" aria-label="Kurangi">−</button><span>${tk.qty}</span><button data-act="qty" data-d="1" aria-label="Tambah">+</button></div></div>
+    <div><span class="lbl">4 · Lengkapi dengan Heritage Pass</span><div class="opts">
+      <button class="opt" aria-pressed="${tk.museum}" data-act="tkt" data-k="museum">${ADD.museum.name}<small>+${rp(ADD.museum.price)} / orang</small></button>
+      ${['gudeg','bakpia'].map(f=>`<button class="opt" aria-pressed="${tk.food===f}" data-act="tkf" data-v="${f}">${ADD[f].name}<small>+${rp(ADD[f].price)} / orang</small></button>`).join('')}
+    </div></div>
+    <div><span class="lbl">5 · Metode bayar (Midtrans Snap, simulasi)</span><div class="opts">${PAYS.map(x=>`<button class="opt" aria-pressed="${x===tk.pay}" data-act="tk" data-k="pay" data-v="${x}">${x}</button>`).join('')}</div></div>
+  </div>
+  <div class="panel stack" style="position:sticky;top:80px">
+    <div><span class="eyebrow">${bundle?'Heritage Matchday Pass':'Tiket pertandingan'}</span><h3 style="margin-top:8px">PSIM vs ${esc(m.opp)}</h3><p class="meta" style="margin-top:4px">${fmtDate(m.date)} · ${fmtTime(m.date)} WIB · Mandala Krida</p></div>
+    <div class="sum">${T.lines.map(l=>`<div class="r"><span>${esc(l.n)}</span><span class="num">${rp(l.v)}</span></div>`).join('')}
+      <div class="r muted"><span>Biaya layanan 1%</span><span class="num">${rp(T.fee)}</span></div>
+      <div class="r tot"><span>Total</span><span>${rp(T.total)}</span></div></div>
+    <p class="meta">Anda mendapat ${Math.floor(T.total/10000)} poin loyalti.</p>
+    <button class="btn gold" data-act="paytk">Bayar dengan ${tk.pay}</button>
+    <p class="notice">Pembayaran adalah simulasi. Versi produksi memakai Midtrans Snap dan backend yang menahan lonjakan pemesanan saat laga besar.</p>
+  </div>
+</div>
+<div style="margin-top:44px" id="mypass">${passSection()}</div>
+</div>`};
+function passSection(){
+  if(!S.passes.length)return `<div class="panel"><span class="eyebrow">Pass saya</span><h3 style="margin-top:8px">Belum ada pass</h3><p class="muted" style="margin-top:6px">Selesaikan pemesanan di atas. QR dinamis Anda akan tampil di sini dan diperbarui tiap 30 detik.</p></div>`;
+  const i=Math.min(tk.passIdx,S.passes.length-1);const p=S.passes[i];
+  return `<div class="sec-h" style="margin-bottom:16px"><div><span class="eyebrow">Pass saya</span><h2>QR dinamis untuk gerbang</h2></div>${S.passes.length>1?`<div class="opts">${S.passes.map((x,j)=>`<button class="opt" aria-pressed="${j===i}" data-act="passsel" data-i="${j}">${x.id}</button>`).join('')}</div>`:''}</div>
+  <div class="pass"><div class="l"><span class="eyebrow">${p.bundle?'Heritage Matchday Pass':'Tiket pertandingan'}</span><h3>PSIM vs ${esc(p.opp)}</h3><p class="meta">${esc(p.when)} · Mandala Krida</p>
+    <div class="inc"><span class="pill">${esc(p.tier)} × ${p.qty}</span>${p.museum?'<span class="pill">Museum</span>':''}${p.food?`<span class="pill">Voucher ${p.food}</span>`:''}<span class="pill ok">Lunas · ${esc(p.pay)}</span></div>
+    <p class="mono" style="font-size:.8rem;color:var(--muted)">ID ${p.id} · Kode berubah tiap 30 detik agar tangkapan layar tidak bisa dipakai ulang.</p></div>
+    <div class="r"><div class="qr" id="qr"></div><div class="bar"><i id="qbar"></i></div><span class="mono" style="font-size:.72rem" id="qtok"></span></div></div>`;
+}
+function hash(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return (h>>>0).toString(16).padStart(8,'0')}
+function startQR(){
+  const p=S.passes[Math.min(tk.passIdx,S.passes.length-1)];const el=$('#qr');if(!p||!el||!window.QRCode)return;
+  let last=-1;
+  const tick=()=>{
+    const el=$('#qr');if(!el)return;const w=Math.floor(Date.now()/30000);
+    if(w!==last){last=w;const tok=`MX1.${p.id}.${w}.${hash(p.id+w+'mx-secret')}`;el.innerHTML='';new QRCode(el,{text:tok,width:176,height:176,correctLevel:QRCode.CorrectLevel.M});$('#qtok').textContent=tok.slice(-14)}
+    const rem=30-(Math.floor(Date.now()/1000)%30);$('#qbar').style.width=(rem/30*100)+'%';
+  };
+  tick();const id=setInterval(tick,1000);onLeave(()=>clearInterval(id));
+}
+
+/* ---- jelajah ---- */
+let cur='keraton',lang='id',loc={mode:'sim',idx:2,real:null},speaking=false;
+P.jelajah=()=>{
+  const s=STOPS.find(x=>x.id===cur);const here=hereStop();
+  const inZone=here&&here.id===s.id;const done=S.checkins.includes(s.id);
+  return `
+<div class="wrap page-h"><span class="eyebrow">Jejak Sumbu Filosofis</span><h1 style="font-size:clamp(2rem,5vw,3.2rem);margin-top:10px">Panggung Krapyak, Keraton, Tugu</h1><p>Sumbu Filosofis Yogyakarta adalah Situs Warisan Dunia UNESCO. Pilih pemberhentian, dengarkan narasi, putar model 3D, dan check-in untuk menambah poin.</p></div>
+<div class="wrap" style="padding-bottom:56px"><div class="trail">
+  <div class="stack">
+    <div class="map" id="map">${mapSVG(here)}</div>
+    <div class="panel stack">
+      <div><span class="lbl">Lokasi Anda</span>
+        <div class="opts"><button class="opt" aria-pressed="${loc.mode==='real'}" data-act="geo">Pakai GPS${loc.real?'':''}<small>${loc.mode==='real'&&loc.real?'aktif':'izinkan lokasi'}</small></button><button class="opt" aria-pressed="${loc.mode==='sim'}" data-act="simmode">Simulasi<small>geser sendiri</small></button></div></div>
+      ${loc.mode==='sim'?`<div><label class="lbl" for="sim">Posisi simulasi: ${esc(STOPS[loc.idx].n)}</label><input id="sim" type="range" min="0" max="${STOPS.length-1}" value="${loc.idx}" data-chg="sim"></div>`:''}
+      <p class="meta" id="geomsg">${here?`Anda berada di zona ${esc(here.n)} (radius 300 m).`:'Anda berada di luar zona pemberhentian.'}</p>
+      <div><span class="lbl">Stempel (${S.checkins.length}/${STOPS.length})</span><div class="stamps">${STOPS.map((x,i)=>`<span class="stamp ${S.checkins.includes(x.id)?'on':''}" title="${esc(x.n)}">${i+1}</span>`).join('')}</div></div>
+    </div>
+  </div>
+  <div class="stack">
+    <div><span class="eyebrow">${esc(s.sub)}</span><h2 style="margin-top:8px">${esc(s.n)}</h2></div>
+    <div class="viewer" id="viewer" aria-label="Model 3D interaktif ${esc(s.n)}"><span class="hint">Seret untuk memutar · model sederhana</span></div>
+    <div class="panel stack">
+      <div class="audio"><button class="btn" data-act="speak">${speaking?'Hentikan narasi':'Putar narasi audio'}</button>
+        <div class="langs" role="group" aria-label="Bahasa narasi">${[['id','Indonesia'],['jv','Jawa Halus'],['en','English']].map(([k,n])=>`<button class="opt" aria-pressed="${lang===k}" data-act="lang" data-v="${k}">${n}</button>`).join('')}</div></div>
+      <p class="story" lang="${lang==='jv'?'jv':lang}">${esc(s.s[lang])}</p>
+      ${lang==='jv'?'<p class="notice">Narasi Jawa Halus berupa draf dan perlu divalidasi narasumber budaya. Suara perangkat memakai logat Indonesia.</p>':''}
+      <div class="opts"><button class="btn gold" data-act="checkin" ${(!inZone||done)?'disabled':''}>${done?'Sudah check-in (+50 poin)':inZone?'Check-in di sini (+50 poin)':'Dekati lokasi untuk check-in'}</button></div>
+    </div>
+  </div>
+</div></div>`};
+function hereStop(){
+  if(loc.mode==='sim')return STOPS[loc.idx];
+  if(!loc.real)return null;
+  let best=null,bd=1e9;STOPS.forEach(s=>{const d=hav(loc.real.lat,loc.real.lng,s.lat,s.lng);if(d<bd){bd=d;best=s}});
+  return bd<=300?best:null;
+}
+function mapSVG(here){
+  return `<svg viewBox="0 0 360 520" role="img" aria-label="Peta skema Sumbu Filosofis dari selatan ke utara">
+  <line class="axis" x1="180" y1="470" x2="180" y2="90"/>
+  <path d="M180 150Q245 140 305 150" fill="none" stroke="var(--soga)" stroke-width="2" stroke-dasharray="3 5"/>
+  <text x="20" y="40" class="sub">U ↑</text><text x="20" y="500" class="sub">SELATAN</text>
+  ${STOPS.map(s=>{const on=s.id===cur,dn=S.checkins.includes(s.id);const right=s.x>200;
+    return `<g data-act="stop" data-id="${s.id}" tabindex="0" role="button" aria-label="${esc(s.n)}" style="cursor:pointer"><circle class="node ${on?'on':dn?'done':''}" cx="${s.x}" cy="${s.y}" r="${on?13:10}"/><text x="${right?s.x+18:s.x+22}" y="${s.y+(right?-26:-2)}" text-anchor="${right?'end':'start'}">${esc(s.n)}</text><text class="sub" x="${right?s.x+18:s.x+22}" y="${s.y+(right?-14:12)}" text-anchor="${right?'end':'start'}">${esc(s.sub)}</text></g>`}).join('')}
+  ${here?`<circle class="me" cx="${here.x-22}" cy="${here.y}" r="6"><animate attributeName="r" values="6;9;6" dur="1.6s" repeatCount="indefinite"/></circle>`:''}
+  </svg>`;
+}
+let three=null;
+function initViewer(){
+  const host=$('#viewer');if(!host||!window.THREE){return}
+  const s=STOPS.find(x=>x.id===cur);const W=host.clientWidth,H=host.clientHeight;
+  const r=new THREE.WebGLRenderer({antialias:true,alpha:true});
+  try{r.setSize(W,H);r.setPixelRatio(Math.min(devicePixelRatio,2))}catch(e){return}
+  host.prepend(r.domElement);
+  const sc=new THREE.Scene(),cam=new THREE.PerspectiveCamera(40,W/H,.1,100);cam.position.set(0,2.4,7.5);cam.lookAt(0,1.4,0);
+  sc.add(new THREE.AmbientLight(0xffffff,.65));const dl=new THREE.DirectionalLight(0xffffff,.9);dl.position.set(4,8,5);sc.add(dl);
+  const g=new THREE.Group();sc.add(g);
+  const M=(c)=>new THREE.MeshStandardMaterial({color:c,roughness:.7,flatShading:true});
+  const gold=M(0xc9972f),stone=M(0xe9e2d2),red=M(0x9a4f2b),wood=M(0x6b3a1e),navy=M(0x1d2a73);
+  const add=(geo,mat,x,y,z)=>{const m=new THREE.Mesh(geo,mat);m.position.set(x,y,z);g.add(m);return m};
+  add(new THREE.CylinderGeometry(3.4,3.6,.25,40),M(0x2b366f),0,0,0);
+  if(s.m==='tugu'){
+    add(new THREE.CylinderGeometry(1.1,1.4,.5,4),stone,0,.4,0).rotation.y=Math.PI/4;
+    add(new THREE.CylinderGeometry(.55,.8,1.6,4),stone,0,1.4,0).rotation.y=Math.PI/4;
+    add(new THREE.CylinderGeometry(.3,.5,1.5,16),stone,0,3,0);
+    add(new THREE.ConeGeometry(.42,1.1,16),gold,0,4.3,0);
+  }else if(s.m==='stadion'){
+    add(new THREE.BoxGeometry(3.4,.05,2.2),M(0x2f8f55),0,.16,0);
+    const ring=add(new THREE.TorusGeometry(2.3,.55,8,40),stone,0,.7,0);ring.rotation.x=Math.PI/2;ring.scale.set(1.15,.9,1);
+    const ring2=add(new THREE.TorusGeometry(2.7,.4,8,40),navy,0,1.15,0);ring2.rotation.x=Math.PI/2;ring2.scale.set(1.15,.9,1);
+    [[-2.6,0],[2.6,0]].forEach(([x,z])=>{add(new THREE.CylinderGeometry(.05,.05,2.6,6),stone,x,1.5,z);add(new THREE.BoxGeometry(.5,.16,.3),gold,x,2.8,z)});
+  }else{
+    add(new THREE.BoxGeometry(4,.5,3),stone,0,.4,0);
+    [[-1.5,-1],[1.5,-1],[-1.5,1],[1.5,1]].forEach(([x,z])=>add(new THREE.CylinderGeometry(.14,.16,2,10),red,x,1.65,z));
+    add(new THREE.ConeGeometry(3.1,1.6,4),wood,0,3.45,0).rotation.y=Math.PI/4;
+    add(new THREE.ConeGeometry(1.2,1.1,4),gold,0,4.5,0).rotation.y=Math.PI/4;
+  }
+  let drag=false,px=0,vel=.006;
+  const el=r.domElement;
+  el.addEventListener('pointerdown',e=>{drag=true;px=e.clientX;el.setPointerCapture(e.pointerId);host.style.cursor='grabbing'});
+  el.addEventListener('pointerup',()=>{drag=false;host.style.cursor='grab'});
+  el.addEventListener('pointermove',e=>{if(!drag)return;g.rotation.y+=(e.clientX-px)*.012;px=e.clientX});
+  let raf;const loop=()=>{raf=requestAnimationFrame(loop);if(!drag)g.rotation.y+=vel;r.render(sc,cam)};loop();
+  three={stop:()=>{cancelAnimationFrame(raf);r.dispose();if(el.parentNode)el.parentNode.removeChild(el)}};
+  onLeave(()=>{if(three){three.stop();three=null}});
+}
+function speak(){
+  if(!('speechSynthesis' in window)){toast('Browser ini tidak mendukung suara narasi');return}
+  if(speaking){speechSynthesis.cancel();speaking=false;render(true);return}
+  const s=STOPS.find(x=>x.id===cur);const u=new SpeechSynthesisUtterance(s.s[lang]);
+  u.lang=lang==='en'?'en-US':'id-ID';u.rate=.95;u.onend=u.onerror=()=>{speaking=false;if(location.hash==='#jelajah')render(true)};
+  speaking=true;speechSynthesis.cancel();speechSynthesis.speak(u);render(true);
+}
+
+/* ---- pasar ---- */
+let cat='Semua';
+P.pasar=()=>{
+  const cats=['Semua','Busana','Kriya','Suvenir'];
+  const list=allProducts().filter(p=>cat==='Semua'||p.cat===cat);
+  return `
+<div class="wrap page-h"><span class="eyebrow">Pasar Batik Mataram</span><h1 style="font-size:clamp(2rem,5vw,3.2rem);margin-top:10px">Batik dan kriya dari pengrajin Jogja</h1><p>Setiap pembelian dibagi otomatis. Pengrajin menerima bagian terbesar, sisanya untuk klub, platform, dan pelestarian budaya.</p></div>
+<div class="wrap" style="padding-bottom:56px">
+  <div class="cats">${cats.map(c=>`<button class="opt" aria-pressed="${c===cat}" data-act="cat" data-v="${c}">${c}</button>`).join('')}</div>
+  <div class="grid g4">${list.map(prodCard).join('')}</div>
+  <div class="panel" style="margin-top:40px"><h3 style="margin-bottom:14px">Pembagian pembayaran otomatis</h3>${splitHTML()}</div>
+</div>`};
+function allProducts(){return PRODUCTS.concat(S.extra||[])}
+
+/* ---- tv ---- */
+let tvCat='Semua';
+P.tv=()=>{
+  const ks=['Semua','Dokumenter','Tim PSIM','Pengrajin'];
+  return `
+<div class="wrap page-h"><span class="eyebrow">Mataram TV</span><h1 style="font-size:clamp(2rem,5vw,3.2rem);margin-top:10px">Dokumenter, tim, dan pengrajin</h1><p>Tayangan sejarah, di balik layar PSIM, dan profil pengrajin budaya. Antarmuka pemutar ini siap dihubungkan ke layanan streaming.</p></div>
+<div class="wrap" style="padding-bottom:56px"><div class="cats">${ks.map(c=>`<button class="opt" aria-pressed="${c===tvCat}" data-act="tvcat" data-v="${c}">${c}</button>`).join('')}</div>
+<div class="grid g3 tvgrid">${TV.filter(v=>tvCat==='Semua'||v.k===tvCat).map(tvCard).join('')}</div></div>`};
+
+/* ---- berita ---- */
+P.berita=()=>`
+<div class="wrap page-h"><span class="eyebrow">Berita</span><h1 style="font-size:clamp(2rem,5vw,3.2rem);margin-top:10px">Kabar Laskar Mataram dan budaya Jogja</h1></div>
+<div class="wrap" style="padding-bottom:56px"><div class="grid g3">${NEWS.map(newsCard).join('')}</div>
+<div class="panel" style="margin-top:40px"><span class="eyebrow">Privasi &amp; PDP</span><h3 style="margin-top:8px">Data Anda</h3><p class="muted" style="margin-top:8px;max-width:70ch">Platform dirancang mengikuti UU No. 27 Tahun 2022 tentang Pelindungan Data Pribadi. Pada prototipe ini seluruh data (poin, pass, keranjang) hanya disimpan di browser Anda dan tidak dikirim ke server.</p></div></div>`;
+
+/* ---- pengrajin ---- */
+P.pengrajin=()=>{
+  const mine=PRODUCTS.filter(p=>p.by.startsWith('Pak Joko')).concat((S.extra||[]));
+  const sales=[['MX-2041','Jersey Batik Laskar Mataram',385000],['MX-2040','Syal Suporter Kawung',95000],['MX-2037','Kain Panjang Batik Tulis Sogan',650000],['MX-2033','Jersey Batik Laskar Mataram',385000]];
+  const tot=sales.reduce((a,s)=>a+s[2],0);
+  return `
+<div class="wrap page-h"><span class="eyebrow">Dashboard pengrajin</span><h1 style="font-size:clamp(2rem,5vw,3.2rem);margin-top:10px">Etalase Pak Joko · Taman Sari</h1><p>Kelola produk dan lihat royalti yang masuk. Data penjualan di bawah adalah contoh.</p></div>
+<div class="wrap" style="padding-bottom:56px"><div class="two">
+  <div class="stack">
+    <div class="panel"><span class="eyebrow">Penjualan terbaru</span>
+      <div class="scroll-x" style="margin-top:12px"><table><thead><tr><th>Order</th><th>Produk</th><th class="n">Nilai</th><th class="n">Bagian 70%</th></tr></thead><tbody>${sales.map(s=>`<tr><td class="mono">${s[0]}</td><td>${s[1]}</td><td class="n">${rp(s[2])}</td><td class="n">${rp(s[2]*.7)}</td></tr>`).join('')}</tbody><tfoot><tr><td colspan="2"><b>Total</b></td><td class="n"><b>${rp(tot)}</b></td><td class="n"><b>${rp(tot*.7)}</b></td></tr></tfoot></table></div></div>
+    <div class="panel"><span class="eyebrow">Produk saya (${mine.length})</span><div class="grid g3" style="margin-top:14px">${mine.map(p=>`<div class="card prod"><div class="art" style="${artStyle(p)};aspect-ratio:3/2"><span class="tag">${p.cat}</span>${IC[p.ic]}</div><div class="body"><b>${esc(p.n)}</b><span class="price">${rp(p.p)}</span></div></div>`).join('')}</div></div>
+  </div>
+  <form class="panel stack" id="addp" style="position:sticky;top:80px">
+    <span class="eyebrow">Tambah produk</span>
+    <div><label class="lbl" for="pn">Nama produk</label><input id="pn" type="text" required placeholder="Batik Tulis Truntum"></div>
+    <div><label class="lbl" for="pp">Harga (Rp)</label><input id="pp" type="number" min="1000" step="1000" required placeholder="250000"></div>
+    <div><label class="lbl" for="pc">Kategori</label><select id="pc"><option>Busana</option><option>Kriya</option><option>Suvenir</option></select></div>
+    <button class="btn" type="submit">Terbitkan di katalog</button>
+    <p class="notice">Produk baru muncul di Pasar Batik pada sesi ini.</p>
+  </form>
+</div></div>`};
+
+/* ---------- render & router ---------- */
+function render(keep){
+  const y=window.scrollY;teardown.forEach(f=>{try{f()}catch(e){}});teardown=[];
+  const r=(location.hash||'#beranda').slice(1);const route=P[r]?r:'beranda';
+  $('#view').innerHTML=P[route]();
+  document.querySelectorAll('#nav a').forEach(a=>{if(a.dataset.r===route)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});
+  document.title='M-Experience Mataram';
+  if(route==='beranda')startCD();
+  if(route==='tiket')startQR();
+  if(route==='jelajah')initViewer();
+  const f=$('#addp');if(f)f.addEventListener('submit',e=>{e.preventDefault();const n=$('#pn').value.trim(),p=+$('#pp').value;if(!n||!p)return;
+    S.extra=(S.extra||[]);const c=$('#pc').value;S.extra.push({id:'u'+Date.now(),n,cat:c,by:'Pak Joko · Taman Sari',p,a:'#1d2a73',b:'#3a1f5a',ic:c==='Busana'?'shirt':c==='Suvenir'?'key':'cloth'});save();toast('Produk diterbitkan');render(true)});
+  window.scrollTo(0,keep?y:0);paintChips();
+}
+function startCD(){
+  const m=MATCHES[0];const tick=()=>{const el=$('#cd');if(!el)return;let d=Math.max(0,m.date-Date.now());const v=[Math.floor(d/DAY),Math.floor(d/36e5)%24,Math.floor(d/6e4)%60,Math.floor(d/1e3)%60];el.querySelectorAll('b').forEach((b,i)=>b.textContent=String(v[i]).padStart(2,'0'))};
+  tick();const id=setInterval(tick,1000);onLeave(()=>clearInterval(id));
+}
+
+/* ---------- modal ---------- */
+function openModal(html){$('#sheet').innerHTML=html;$('#modal').hidden=false;const b=$('#sheet button');b&&b.focus()}
+function closeModal(){$('#modal').hidden=true;$('#sheet').innerHTML='';tvStop()}
+let tvT=null;function tvStop(){clearInterval(tvT);tvT=null}
+function cartHTML(){
+  const items=S.cart.map(c=>({...c,p:allProducts().find(p=>p.id===c.id)})).filter(c=>c.p);
+  const sub=items.reduce((a,c)=>a+c.p.p*c.q,0);
+  if(!items.length)return `<div class="head"><h3>Keranjang</h3><button class="x" data-act="close" aria-label="Tutup">✕</button></div><p class="muted">Keranjang masih kosong. Lihat <a href="#pasar" data-act="close">Pasar Batik</a>.</p>`;
+  return `<div class="head"><h3>Keranjang</h3><button class="x" data-act="close" aria-label="Tutup">✕</button></div>
+  ${items.map(c=>`<div class="line-item"><b>${esc(c.p.n)}</b><span class="num">${rp(c.p.p*c.q)}</span><div class="qty" style="grid-column:1"><button data-act="cq" data-id="${c.id}" data-d="-1" aria-label="Kurangi">−</button><span>${c.q}</span><button data-act="cq" data-id="${c.id}" data-d="1" aria-label="Tambah">+</button></div></div>`).join('')}
+  <div class="sum" style="margin-top:12px"><div class="r tot"><span>Total</span><span>${rp(sub)}</span></div></div>
+  <div style="margin-top:14px"><span class="lbl">Pembagian untuk pesanan ini</span>
+    <div class="sum">${[['Pengrajin',.7],['Kas Klub PSIM',.15],['Pengembang platform',.1],['Dana Pelestarian Budaya DIY',.05]].map(([n,f])=>`<div class="r"><span>${n} ${f*100}%</span><span class="num">${rp(Math.round(sub*f))}</span></div>`).join('')}</div></div>
+  <div style="margin-top:14px"><span class="lbl">Metode bayar</span><div class="opts">${PAYS.map(x=>`<button class="opt" aria-pressed="${x===tk.pay}" data-act="tk" data-k="pay" data-v="${x}" data-cart="1">${x}</button>`).join('')}</div></div>
+  <button class="btn gold" style="width:100%;margin-top:18px" data-act="paycart">Bayar ${rp(sub)} dengan ${tk.pay}</button>
+  <p class="notice" style="margin-top:12px">Simulasi. Pembagian dihitung otomatis oleh gateway pada versi produksi.</p>`;
+}
+
+/* ---------- actions ---------- */
+const A={
+  theme(){const dark=document.documentElement.getAttribute('data-theme')==='dark'||(!document.documentElement.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme:dark)').matches);S.theme=dark?'light':'dark';save();applyTheme()},
+  points(){openModal(`<div class="head"><h3>Poin loyalti</h3><button class="x" data-act="close" aria-label="Tutup">✕</button></div><p class="num" style="font:400 3rem var(--display)">${S.points}</p><p class="muted" style="margin-top:8px">Dapatkan 1 poin tiap belanja Rp10.000, plus 50 poin untuk setiap check-in di Jejak Sumbu. Pass tersimpan: ${S.passes.length}, pesanan pasar: ${S.orders.length}.</p><button class="btn ghost sm" style="margin-top:16px" data-act="reset">Hapus data prototipe</button>`)},
+  reset(){S={points:0,passes:[],cart:[],orders:[],checkins:[],theme:S.theme,userProducts:[]};save();closeModal();render();toast('Data prototipe dihapus')},
+  close:closeModal,
+  buy(d){tk.matchId=d.id;location.hash='#tiket'},
+  tk(d){tk[d.k]=d.v;if(d.cart){$('#sheet').innerHTML=cartHTML()}else render(true)},
+  qty(d){tk.qty=Math.min(10,Math.max(1,tk.qty+ +d.d));render(true)},
+  tkt(){tk.museum=!tk.museum;render(true)},
+  tkf(d){tk.food=tk.food===d.v?'':d.v;render(true)},
+  paytk(){
+    const T=ticketTotal(),m=MATCHES.find(x=>x.id===tk.matchId),t=TIERS.find(x=>x.id===tk.tier);
+    const id='MX'+Math.random().toString(36).slice(2,8).toUpperCase();
+    S.passes.unshift({id,opp:m.opp,when:fmtDate(m.date)+' · '+fmtTime(m.date)+' WIB',tier:t.name,qty:tk.qty,museum:tk.museum,food:tk.food,bundle:tk.museum||!!tk.food,pay:tk.pay,total:T.total});
+    tk.passIdx=0;S.points+=Math.floor(T.total/10000);save();render(true);
+    toast('Pembayaran berhasil (simulasi). Pass Anda siap.');setTimeout(()=>{const e=$('#mypass');e&&e.scrollIntoView({behavior:'smooth'})},50);
+  },
+  passsel(d){tk.passIdx=+d.i;render(true)},
+  stop(d){if(window.speechSynthesis)speechSynthesis.cancel();speaking=false;cur=d.id;render(true)},
+  lang(d){lang=d.v;if(speaking){speechSynthesis.cancel();speaking=false}render(true)},
+  speak,
+  simmode(){loc.mode='sim';render(true)},
+  geo(){
+    if(!navigator.geolocation){toast('Lokasi tidak tersedia, pakai mode simulasi');return}
+    navigator.geolocation.getCurrentPosition(p=>{loc={mode:'real',idx:loc.idx,real:{lat:p.coords.latitude,lng:p.coords.longitude}};render(true)},()=>{loc.mode='sim';render(true);toast('Izin lokasi ditolak atau diblokir. Pakai mode simulasi.')},{timeout:8000});
+  },
+  checkin(){const s=STOPS.find(x=>x.id===cur);if(S.checkins.includes(s.id))return;S.checkins.push(s.id);addPoints(50);toast('Check-in '+s.n+' berhasil. +50 poin');render(true)},
+  cat(d){cat=d.v;render(true)},
+  tvcat(d){tvCat=d.v;render(true)},
+  add(d){const c=S.cart.find(x=>x.id===d.id);if(c)c.q++;else S.cart.push({id:d.id,q:1});save();paintChips();toast('Ditambahkan ke keranjang')},
+  cart(){openModal(cartHTML())},
+  cq(d){const c=S.cart.find(x=>x.id===d.id);c.q+= +d.d;if(c.q<=0)S.cart=S.cart.filter(x=>x!==c);save();paintChips();$('#sheet').innerHTML=cartHTML()},
+  paycart(){
+    const sub=S.cart.reduce((a,c)=>{const p=allProducts().find(x=>x.id===c.id);return a+(p?p.p*c.q:0)},0);
+    const id='ORD'+Math.random().toString(36).slice(2,7).toUpperCase();
+    S.orders.unshift({id,sub,pay:tk.pay});S.cart=[];S.points+=Math.floor(sub/10000);save();paintChips();
+    openModal(`<div class="head"><h3>Pembayaran berhasil</h3><button class="x" data-act="close" aria-label="Tutup">✕</button></div><p>Pesanan <b class="mono">${id}</b> senilai <b>${rp(sub)}</b> dibayar via ${tk.pay} (simulasi). Anda mendapat ${Math.floor(sub/10000)} poin.</p><div class="sum" style="margin-top:14px">${[['Pengrajin',.7],['Kas Klub PSIM',.15],['Pengembang platform',.1],['Dana Pelestarian Budaya DIY',.05]].map(([n,f])=>`<div class="r"><span>${n}</span><span class="num">${rp(Math.round(sub*f))}</span></div>`).join('')}</div>`);
+  },
+  news(d){const n=NEWS[+d.i];openModal(`<div class="head"><div><span class="eyebrow">${n.c}</span><h3 style="margin-top:8px">${esc(n.t)}</h3></div><button class="x" data-act="close" aria-label="Tutup">✕</button></div><p>${esc(n.d)}</p><p class="notice" style="margin-top:14px">Konten contoh untuk prototipe.</p>`)},
+  tv(d){
+    const v=TV.find(x=>x.id===d.id);
+    openModal(`<div class="head"><div><span class="eyebrow">${v.k} · ${v.d}</span><h3 style="margin-top:8px">${esc(v.t)}</h3></div><button class="x" data-act="close" aria-label="Tutup">✕</button></div>
+    <div class="player art" style="${artStyle(v)}"><span id="ptxt">Tekan putar untuk pratinjau</span></div>
+    <div class="scrub"><i id="pbar"></i></div>
+    <div class="opts" style="margin-top:14px"><button class="btn sm" id="pbtn" data-act="tvplay" data-d="${v.d}">Putar</button><span class="meta" style="align-self:center" id="ptime">00:00 / ${v.d}</span></div>
+    <p class="notice" style="margin-top:14px">Pratinjau antarmuka pemutar. Video belum terhubung ke layanan streaming.</p>`);
+  },
+  tvplay(){
+    const b=$('#pbtn');if(tvT){tvStop();b.textContent='Putar';return}
+    b.textContent='Jeda';let s=+(b.dataset.s||0);
+    $('#ptxt').textContent='Sedang diputar (simulasi)';
+    tvT=setInterval(()=>{s++;b.dataset.s=s;$('#pbar').style.width=Math.min(100,s/1.2)+'%';const mm=String(Math.floor(s/60)).padStart(2,'0'),ss=String(s%60).padStart(2,'0');$('#ptime').textContent=mm+':'+ss+' / '+b.dataset.d;if(s>=120){tvStop();b.textContent='Putar'}},1000);
+  }
+};
+document.addEventListener('click',e=>{
+  if(e.target===$('#modal')){closeModal();return}
+  const t=e.target.closest('[data-act]');if(!t)return;
+  const f=A[t.dataset.act];if(f){if(t.tagName==='A'&&t.dataset.act==='close'){closeModal();return}f(t.dataset,t)}
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&!$('#modal').hidden)closeModal();
+  if((e.key==='Enter'||e.key===' ')&&e.target.matches&&e.target.matches('[role=button][data-act]')){e.preventDefault();e.target.click()}
+});
+document.addEventListener('input',e=>{if(e.target.dataset.chg==='sim'){loc.idx=+e.target.value;cur=STOPS[loc.idx].id;render(true);const s=$('#sim');s&&s.focus()}});
+window.addEventListener('hashchange',()=>{if(!$('#modal').hidden)closeModal();if('speechSynthesis' in window)speechSynthesis.cancel();speaking=false;render()});
+render();
+})();
+</script>
+
+</body></html>
